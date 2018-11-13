@@ -1,4 +1,6 @@
 require("dotenv").config()
+var Spotify = require('node-spotify-api');
+var keys = require('./keys')
 
 	// Node module imports needed to run the functions
 	var fs = require("fs"); //reads and writes files
@@ -20,42 +22,41 @@ require("dotenv").config()
 	};
 // ---------------------------------------------------------------------------------------------------------------
 // Functions
-	// Movie function, uses the Request module to call the OMDB api
-	function movieThis(){
-		var movie = process.argv[3];
-		if(!movie){
-			movie = "mr nobody";
+function movieThis(){
+	var movie = process.argv[3];
+	if(!movie){
+		movie = "mr nobody";
+	}
+	params = movie
+	request("http://www.omdbapi.com/?t=" + params + "&y=&plot=short&r=json&tomatoes=true&apikey=trilogy", function (error, response, body) {
+		if (!error && response.statusCode == 200) {
+			var movieObject = JSON.parse(body);
+			//console.log(movieObject); // Show the text in the terminal
+			var movieResults =
+			"------------------------------ begin ------------------------------" + "\r\n"
+			"Title: " + movieObject.Title+"\r\n"+
+			"Year: " + movieObject.Year+"\r\n"+
+			"Imdb Rating: " + movieObject.imdbRating+"\r\n"+
+			"Country: " + movieObject.Country+"\r\n"+
+			"Language: " + movieObject.Language+"\r\n"+
+			"Plot: " + movieObject.Plot+"\r\n"+
+			"Actors: " + movieObject.Actors+"\r\n"+
+			"Rotten Tomatoes Rating: " + movieObject.tomatoRating+"\r\n"+
+			"Rotten Tomatoes URL: " + movieObject.tomatoURL + "\r\n" + 
+			"------------------------------ fin ------------------------------" + "\r\n";
+			console.log(movieResults);
+			log(movieResults); // calling log function
+		} else {
+			console.log("Error :"+ error);
+			return;
 		}
-		params = movie
-		request("http://www.omdbapi.com/?t=" + params + "&y=&plot=short&r=json&tomatoes=true", function (error, response, body) {
-			if (!error && response.statusCode == 200) {
-				var movieObject = JSON.parse(body);
-				//console.log(movieObject); // Show the text in the terminal
-				var movieResults =
-				"------------------------------ begin ------------------------------" + "\r\n"
-				"Title: " + movieObject.Title+"\r\n"+
-				"Year: " + movieObject.Year+"\r\n"+
-				"Imdb Rating: " + movieObject.imdbRating+"\r\n"+
-				"Country: " + movieObject.Country+"\r\n"+
-				"Language: " + movieObject.Language+"\r\n"+
-				"Plot: " + movieObject.Plot+"\r\n"+
-				"Actors: " + movieObject.Actors+"\r\n"+
-				"Rotten Tomatoes Rating: " + movieObject.tomatoRating+"\r\n"+
-				"Rotten Tomatoes URL: " + movieObject.tomatoURL + "\r\n" + 
-				"------------------------------ fin ------------------------------" + "\r\n";
-				console.log(movieResults);
-				log(movieResults); // calling log function
-			} else {
-				console.log("Error :"+ error);
-				return;
-			}
-		});
-	};
+	});
+};
 	// Spotify function, uses the Spotify module to call the Spotify api
 	function spotifyThisSong(songName) {
 		var songName = process.argv[3];
 		if(!songName){
-			songName = "What's my age again";
+			songName = "The Sign";
 		}
 		params = songName;
 		spotify.search({ type: "track", query: params }, function(err, data) {
@@ -74,7 +75,7 @@ require("dotenv").config()
 					}
 				}
 			}	else {
-				console.log("Error :"+ err);
+				console.log("Error: "+ err);
 				return;
 			}
 		});
