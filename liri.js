@@ -99,3 +99,10 @@ function movieThis(){
 	    }
 	  });
 	}
+
+	// Unable to use the bands in town api
+	//I would do the same thing as I did to the ombd api
+	//Call the api
+	//Attach user input
+	//Call to the information needed
+	//Put it onto the screen
