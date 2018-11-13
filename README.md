@@ -1,4 +1,4 @@
-# Homework8
+# Homework 8 LIRI Node App
 
 ## LIRI stands for Language Interpretation and Recognition Interface
 
